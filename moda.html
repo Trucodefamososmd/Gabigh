@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>La moda de Gabi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Juego de moda - Gabi</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       background: radial-gradient(circle at top left, #00c853, #ffd600, #1b5e20);
       background-size: 400% 400%;
       animation: fondoTropical 18s ease infinite;
@@ -17,10 +17,9 @@
       min-height: 100vh;
       padding: 40px 20px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       text-align: center;
-      flex-direction: column;
     }
 
     @keyframes fondoTropical {
@@ -31,24 +30,46 @@
 
     h1 {
       font-family: 'Pacifico', cursive;
-      font-size: 4em;
+      font-size: 3.5em;
       text-shadow: 4px 4px 10px #000;
       color: #fffde7;
-      margin-bottom: 0;
+      margin-bottom: 10px;
     }
 
-    p {
-      font-size: 2em;
+    h2 {
+      font-size: 1.8em;
+      margin-bottom: 30px;
       text-shadow: 2px 2px 8px #000;
-      margin-top: 10px;
-      font-weight: bold;
       color: #fffde7;
+    }
+
+    .gallery, #finalLooks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .gallery img, #finalLooks img {
+      width: 180px;
+      height: 260px;
+      object-fit: contain;
+      background-color: black;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: transform 0.3s, border 0.3s;
+    }
+
+    .gallery img:hover, #finalLooks img:hover {
+      transform: scale(1.05);
+      border-color: #ffd600;
     }
 
     .boton {
-      margin-top: 30px;
-      background: linear-gradient(145deg, #00cc00, #003300);
-      border: 2px solid #00ff00;
+      background: linear-gradient(145deg, #ffee58, #64dd17);
+      border: 2px solid #fffde7;
       color: black;
       padding: 15px 35px;
       font-size: 1.2em;
@@ -58,22 +79,111 @@
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s;
       text-decoration: none;
+      margin-top: 20px;
+      align-self: center;
       display: inline-block;
     }
 
     .boton:hover {
       transform: scale(1.1);
-      box-shadow: 0 6px 12px #00ff00;
-      background: linear-gradient(145deg, #33ff33, #006600);
-      color: black;
+      box-shadow: 0 6px 12px #ffd600;
+      background: linear-gradient(145deg, #ffff8d, #aeea00);
+    }
+
+    #winner img {
+      width: 300px;
+      border-radius: 10px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h1>La moda de Gabi</h1>
-  <p>Próximamente disponible...</p>
-  <a href="index.html" class="boton">🏠 Volver al inicio</a>
+  <h1>Juego de moda - Gabi</h1>
+  <h2>Hacé clic en un look, y después en el cuadrado donde querés que esté</h2>
+
+  <div class="gallery" id="gallery"></div>
+
+  <button class="boton" id="nextButton" onclick="nextSet()" style="display:none;">Siguiente</button>
+  <button class="boton" id="finalButton" onclick="showFinal()" style="display:none;">Pasar a la Final</button>
+
+  <div id="finalGallery" style="display:none;">
+    <h2>Elige tu look ganador</h2>
+    <div class="gallery" id="finalLooks"></div>
+  </div>
+
+  <div id="winner" style="display:none;">
+    <h2>Look Ganador:</h2>
+    <img id="winnerImg" src="">
+  </div>
+
+  <a class="boton" href="index.html">Volver al inicio</a>
+
+  <script>
+    let looks = [
+      "looks/1.jpg", "looks/2.jpg", "looks/3.jpg",
+      "looks/4.jpg", "looks/5.jpg", "looks/6.jpg",
+      "looks/7.jpg", "looks/8.jpg", "looks/9.jpg",
+      "looks/10.jpg", "looks/11.jpg", "looks/12.jpg",
+      "looks/13.jpg", "looks/14.jpg", "looks/15.jpg"
+    ];
+
+    let currentSet = 0;
+    let selectedLooks = [];
+
+    function loadLooks() {
+      let gallery = document.getElementById('gallery');
+      gallery.innerHTML = "";
+      for (let i = currentSet * 3; i < (currentSet + 1) * 3 && i < looks.length; i++) {
+        let img = document.createElement('img');
+        img.src = looks[i];
+        img.onclick = function() { selectLook(img, looks[i]); };
+        gallery.appendChild(img);
+      }
+      document.getElementById('nextButton').style.display = 'none';
+    }
+
+    function selectLook(img, look) {
+      document.querySelectorAll('.gallery img').forEach(image => {
+        image.style.border = "3px solid transparent";
+      });
+      img.style.border = "3px solid red";
+      selectedLooks[currentSet] = look;
+      document.getElementById('nextButton').style.display = 'block';
+    }
+
+    function nextSet() {
+      currentSet++;
+      if (currentSet < 5) {
+        loadLooks();
+      } else {
+        document.getElementById('gallery').style.display = 'none';
+        document.getElementById('nextButton').style.display = 'none';
+        document.getElementById('finalButton').style.display = 'block';
+      }
+    }
+
+    function showFinal() {
+      document.getElementById('finalButton').style.display = 'none';
+      document.getElementById('finalGallery').style.display = 'block';
+      let finalGallery = document.getElementById('finalLooks');
+      finalGallery.innerHTML = "";
+      selectedLooks.forEach(look => {
+        let img = document.createElement('img');
+        img.src = look;
+        img.onclick = function() { showWinner(look); };
+        finalGallery.appendChild(img);
+      });
+    }
+
+    function showWinner(look) {
+      document.getElementById('finalGallery').style.display = 'none';
+      document.getElementById('winner').style.display = 'block';
+      document.getElementById('winnerImg').src = look;
+    }
+
+    window.onload = loadLooks;
+  </script>
 
 </body>
 </html>
