@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Memes de Gabi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gabi Mancuso</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       background: radial-gradient(circle at top left, #00c853, #ffd600, #1b5e20);
       background-size: 400% 400%;
       animation: fondoTropical 18s ease infinite;
@@ -17,10 +17,9 @@
       min-height: 100vh;
       padding: 40px 20px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       text-align: center;
-      flex-direction: column;
     }
 
     @keyframes fondoTropical {
@@ -33,28 +32,36 @@
       font-family: 'Pacifico', cursive;
       font-size: 4em;
       text-shadow: 4px 4px 10px #000;
+      margin-bottom: 30px;
+      letter-spacing: 3px;
       color: #fffde7;
-      margin-bottom: 0;
     }
 
-    p {
-      font-size: 2em;
-      text-shadow: 2px 2px 8px #000;
-      margin-top: 10px;
-      font-weight: bold;
-      color: #fffde7;
+    h3 {
+      font-weight: normal;
+      margin: 5px 0;
+    }
+
+    #memeText {
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 10px;
+      border: none;
+      width: 80%;
+      max-width: 400px;
     }
 
     .boton {
-      margin-top: 30px;
-      background: linear-gradient(145deg, #00cc00, #003300);
-      border: 2px solid #00ff00;
+      background: linear-gradient(145deg, #ffab00, #ff6f00);
+      border: 2px solid #ffd740;
       color: black;
       padding: 15px 35px;
+      margin: 15px;
       font-size: 1.2em;
       font-weight: bold;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px #000;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s;
       text-decoration: none;
@@ -63,17 +70,85 @@
 
     .boton:hover {
       transform: scale(1.1);
-      box-shadow: 0 6px 12px #00ff00;
-      background: linear-gradient(145deg, #33ff33, #006600);
-      color: black;
+      box-shadow: 0 6px 14px #ffd740;
+      background: linear-gradient(145deg, #ffd740, #ff9100);
     }
   </style>
 </head>
 <body>
-
   <h1>Crea tu meme de Gabi</h1>
-  <p>Próximamente disponible...</p>
-  <a href="index.html" class="boton">🏠 Volver al inicio</a>
+  <h3>Arrastrá el texto donde quieras</h3>
+  <h3>Cuando termines tu meme, ¡sacale captura!</h3>
 
+  <canvas id="memeCanvas" width="500" height="500"></canvas>
+  <br>
+  <input type="text" id="memeText" placeholder="Escribí tu meme acá">
+  <br>
+  <button class="boton" onclick="generateMeme()">Cambiar foto</button>
+  <br>
+  <a class="boton" href="index.html">Volver al inicio</a>
+
+  <script>
+    let images = [];
+    for (let i = 1; i <= 14; i++) {
+      let img = new Image();
+      img.src = `memes/${i}.jpg`;
+      images.push(img);
+    }
+
+    let canvas = document.getElementById("memeCanvas");
+    let ctx = canvas.getContext("2d");
+    let text = "";
+    let textX = 250;
+    let textY = 50;
+    let isDragging = false;
+    let selectedImage = new Image();
+
+    function drawMeme() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(selectedImage, 0, 0, canvas.width, canvas.height);
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "white";
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 3;
+      ctx.textAlign = "center";
+      ctx.strokeText(text, textX, textY);
+      ctx.fillText(text, textX, textY);
+    }
+
+    document.getElementById("memeText").addEventListener("input", function() {
+      text = this.value;
+      drawMeme();
+    });
+
+    canvas.addEventListener("mousedown", function(event) {
+      isDragging = true;
+    });
+
+    canvas.addEventListener("mousemove", function(event) {
+      if (isDragging) {
+        textX = event.offsetX;
+        textY = event.offsetY;
+        drawMeme();
+      }
+    });
+
+    canvas.addEventListener("mouseup", function() {
+      isDragging = false;
+    });
+
+    function generateMeme() {
+      let randomIndex = Math.floor(Math.random() * images.length);
+      selectedImage = new Image();
+      selectedImage.src = images[randomIndex].src;
+      selectedImage.onload = function() {
+        drawMeme();
+      };
+    }
+
+    window.onload = function() {
+      generateMeme();
+    };
+  </script>
 </body>
 </html>

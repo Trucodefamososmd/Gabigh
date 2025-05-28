@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Juego de Preguntas - Gabi</title>
+  <title>Verdadero o Falso - Gabi</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
@@ -44,7 +44,6 @@
       padding: 30px 35px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
       backdrop-filter: blur(4px);
-      font-family: Arial, sans-serif;
       margin-bottom: 20px;
     }
 
@@ -54,18 +53,13 @@
     }
 
     .options {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .options li {
-      margin: 14px 0;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
     }
 
     .options button {
-      width: 100%;
-      padding: 14px;
+      padding: 14px 30px;
       font-size: 1.2em;
       font-weight: bold;
       border-radius: 20px;
@@ -104,8 +98,6 @@
       transition: transform 0.3s, box-shadow 0.3s;
       text-decoration: none;
       margin-top: 30px;
-      align-self: center;
-      display: inline-block;
     }
 
     .boton:hover {
@@ -117,11 +109,14 @@
 </head>
 <body>
 
-  <h1>Juego de Preguntas - Gabi</h1>
+  <h1>Verdadero o Falso - Gabi</h1>
 
   <div class="question-container">
     <div id="question" class="question"></div>
-    <ul id="options" class="options"></ul>
+    <div class="options">
+      <button onclick="selectAnswer(true)">Verdadero</button>
+      <button onclick="selectAnswer(false)">Falso</button>
+    </div>
     <div id="result"></div>
   </div>
 
@@ -129,95 +124,46 @@
 
   <script>
     const questions = [
-      {
-        question: "¿Qué edad tiene Gabi?",
-        options: ["25 años", "30 años", "27 años", "29 años"],
-        answer: 2
-      },
-      {
-        question: "¿Cuál fue su porcentaje de eliminación?",
-        options: ["60%", "50%", "55%", "65%"],
-        answer: 2
-      },
-      {
-        question: "¿Cómo se llama su hermano?",
-        options: ["Guillermo", "Gustavo", "Gabriel", "Gonzalo"],
-        answer: 0
-      },
-      {
-        question: "¿A quién besó Gabi?",
-        options: ["Tato", "Juan", "Lucas", "Pablo"],
-        answer: 0
-      },
-      {
-        question: "¿En qué puesto se fue su hermano?",
-        options: ["3", "2", "1", "4"],
-        answer: 2
-      },
-      {
-        question: "¿En qué lugar (de los nuevos) entró Gabi?",
-        options: ["3", "2", "5", "4"],
-        answer: 1
-      },
-      {
-        question: "¿Cómo se llama su grupo?",
-        options: ["The Queens", "Bad Bitch", "The Bosses", "Las Reinas"],
-        answer: 1
-      },
-      {
-        question: "¿Con quién la shipearon afuera de la casa?",
-        options: ["Saif", "Diego", "Lucas", "Mateo"],
-        answer: 0
-      },
-      {
-        question: "¿Con quién se peleó cuando estaban practicando la coreo?",
-        options: ["Chiara", "Lucía", "Mariana", "Sofía"],
-        answer: 0
-      }
+      { question: "Tiene 27 años", answer: false },
+      { question: "Su grupo se llamaba las Bad Bitch", answer: true },
+      { question: "Junto a Cata le rompieron el pingüino al Tridente", answer: true },
+      { question: "En la casa se dio un beso con Ulises", answer: false },
+      { question: "Fue eliminada en placa negativa", answer: false },
+      { question: "Su hermano se llama Giuliano", answer: false },
+      { question: "Su hermano fue el primer eliminado de los familiares", answer: false },
+      { question: "Fuera de la casa la shipean con Saif", answer: true },
+      { question: "Gabi alguna semana fue líder en la casa", answer: true },
+      { question: "Tiene más de 200 mil seguidores en Instagram", answer: true }
     ];
 
     let currentQuestion = 0;
     let score = 0;
 
     const questionEl = document.getElementById('question');
-    const optionsEl = document.getElementById('options');
     const resultEl = document.getElementById('result');
 
     function loadQuestion() {
       resultEl.textContent = '';
-      const q = questions[currentQuestion];
-      questionEl.textContent = q.question;
-      optionsEl.innerHTML = '';
-
-      q.options.forEach((option, index) => {
-        const li = document.createElement('li');
-        const button = document.createElement('button');
-        button.textContent = option;
-        button.onclick = () => selectOption(index);
-        li.appendChild(button);
-        optionsEl.appendChild(li);
-      });
+      questionEl.textContent = questions[currentQuestion].question;
     }
 
-    function selectOption(selectedIndex) {
-      const correct = questions[currentQuestion].answer;
-      if (selectedIndex === correct) {
+    function selectAnswer(userAnswer) {
+      const correctAnswer = questions[currentQuestion].answer;
+      if (userAnswer === correctAnswer) {
         score++;
         resultEl.textContent = "¡Correcto! 🏆";
         resultEl.style.color = "#33ff33";
       } else {
-        resultEl.textContent = `Incorrecto. La respuesta correcta es: "${questions[currentQuestion].options[correct]}"`;
+        resultEl.textContent = `Incorrecto. Era "${correctAnswer ? 'Verdadero' : 'Falso'}"`;
         resultEl.style.color = "#ff3333";
       }
 
-      Array.from(optionsEl.children).forEach(li => {
-        li.firstChild.disabled = true;
-        li.firstChild.style.cursor = 'default';
-      });
+      document.querySelectorAll('.options button').forEach(btn => btn.disabled = true);
 
       setTimeout(() => {
         currentQuestion++;
         if (currentQuestion < questions.length) {
+          document.querySelectorAll('.options button').forEach(btn => btn.disabled = false);
           loadQuestion();
         } else {
           showFinalScore();
@@ -227,7 +173,7 @@
 
     function showFinalScore() {
       questionEl.textContent = `¡Juego terminado! Tu puntaje es ${score} de ${questions.length}.`;
-      optionsEl.innerHTML = '';
+      document.querySelector('.options').innerHTML = '';
       resultEl.textContent = '';
     }
 
