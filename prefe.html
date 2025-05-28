@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>¿Qué Gabriela preferís?</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: radial-gradient(circle at top left, #00c853, #ffd600, #1b5e20);
+      background-size: 400% 400%;
+      animation: fondoTropical 18s ease infinite;
+      color: #fffde7;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    @keyframes fondoTropical {
+      0% {background-position: 0% 0%;}
+      50% {background-position: 100% 100%;}
+      100% {background-position: 0% 0%;}
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 4.2em;
+      text-shadow: 4px 4px 10px #000;
+      margin-bottom: 40px;
+      letter-spacing: 3px;
+      color: #fffde7;
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 25px;
+      color: #fffde7;
+    }
+
+    .boton {
+      background: linear-gradient(145deg, #4caf50, #1b5e20);
+      border: 2px solid #ffee58;
+      color: white;
+      padding: 15px 35px;
+      margin: 15px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .boton:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px #ffee58;
+      background: linear-gradient(145deg, #66bb6a, #2e7d32);
+    }
+
+    .option {
+      display: inline-block;
+      margin: 10px;
+    }
+
+    .option img {
+      width: 200px;
+      border-radius: 10px;
+      border: 3px solid #ffee58;
+      cursor: pointer;
+      transition: transform 0.3s;
+      box-shadow: 0 0 10px #ffee58;
+    }
+
+    .option img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #fff176;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>¿Qué Gabriela preferís?</h1>
+  <div class="container">
+    <p>Elegí tu favorita en cada duelo:</p>
+    <div class="options" id="options"></div>
+    <p id="resultado"></p>
+  </div>
+  <button class="boton" onclick="location.href='index.html'">🏠 Volver al inicio</button>
+
+  <script>
+    // Cambiá las imágenes por fotos de Gabriela o relacionadas, ejemplo:
+    let personas = [
+      "jugadores/1.png", "jugadores/2.png", "jugadores/3.png", "jugadores/4.png", "jugadores/5.png",
+      "jugadores/6.png", "jugadores/7.png", "jugadores/8.png", "jugadores/9.png", "jugadores/10.png",
+      "jugadores/11.png", "jugadores/12.png", "jugadores/13.png", "jugadores/14.png", "jugadores/15.png",
+      "jugadores/16.png", "jugadores/17.png", "jugadores/18.png", "jugadores/19.png", "jugadores/20.png",
+      "jugadores/21.png", "jugadores/22.png", "jugadores/23.png", "jugadores/24.png", "jugadores/25.png",
+      "jugadores/26.png", "jugadores/27.png", "jugadores/28.png", "jugadores/29.png", "jugadores/30.png",
+      "jugadores/31.png", "jugadores/32.png", "jugadores/33.png", "jugadores/34.png", "jugadores/35.png"
+    ];
+
+    let ganador = null;
+    let personasRestantes = [...personas];
+
+    function iniciarJuego() {
+      ganador = personasRestantes.splice(Math.floor(Math.random() * personasRestantes.length), 1)[0];
+      siguienteDuelos();
+    }
+
+    function siguienteDuelos() {
+      if (personasRestantes.length === 0) {
+        document.getElementById("options").innerHTML = `<h2>¡Tu ganador/a es!</h2><img src="${ganador}" width="200">`;
+        return;
+      }
+
+      let p2 = personasRestantes.splice(Math.floor(Math.random() * personasRestantes.length), 1)[0];
+      document.getElementById("options").innerHTML = `
+        <div class='option'><img src="${ganador}" onclick="elegir('${ganador}')"></div>
+        <div class='option'><img src="${p2}" onclick="elegir('${p2}')"></div>
+      `;
+    }
+
+    function elegir(seleccionado) {
+      ganador = seleccionado;
+      siguienteDuelos();
+    }
+
+    iniciarJuego();
+  </script>
+</body>
+</html>

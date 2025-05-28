@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Redes de Gabi</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top left, #00c853, #ffd600, #1b5e20);
+      background-size: 400% 400%;
+      animation: fondoTropical 18s ease infinite;
+      color: white;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 30px;
+    }
+
+    @keyframes fondoTropical {
+      0% {background-position: 0% 0%;}
+      50% {background-position: 100% 100%;}
+      100% {background-position: 0% 0%;}
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 4.2em;
+      text-shadow: 4px 4px 10px #000;
+      margin-bottom: 10px;
+      letter-spacing: 3px;
+      color: #fffde7;
+    }
+
+    .redes {
+      display: flex;
+      gap: 25px;
+      font-size: 1.5em;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+    }
+
+    .redes a {
+      color: #ffee58;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 2px solid #ffee58;
+      border-radius: 25px;
+      box-shadow: 0 4px 10px rgba(255, 238, 88, 0.6);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+    }
+
+    .redes a:hover {
+      background-color: #ffee58;
+      color: #1b5e20;
+      box-shadow: 0 6px 15px rgba(255, 238, 88, 0.9);
+    }
+
+    button {
+      background: linear-gradient(145deg, #4caf50, #1b5e20);
+      border: 2px solid #ffee58;
+      color: white;
+      padding: 15px 35px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      font-family: inherit;
+      user-select: none;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px #ffee58;
+      background: linear-gradient(145deg, #66bb6a, #2e7d32);
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Redes de Gabi</h1>
+  <div class="redes">
+    <a href="https://www.instagram.com/gabrielagianatassio?igsh=ZXptenF3dThzZWl6" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://www.tiktok.com/@gabriela.gianatassio?_t=ZM-8winxllrRva&_r=1" target="_blank" rel="noopener noreferrer">TikTok</a>
+  </div>
+  <button onclick="window.location.href='index.html'">Volver al inicio</button>
+</body>
+</html>

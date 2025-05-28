@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gabriela Gianatassio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif; /* Fuente normal para el cuerpo */
+      background: radial-gradient(circle at top left, #00c853, #ffd600, #1b5e20);
+      background-size: 400% 400%;
+      animation: fondoTropical 18s ease infinite;
+      color: white;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    @keyframes fondoTropical {
+      0% {background-position: 0% 0%;}
+      50% {background-position: 100% 100%;}
+      100% {background-position: 0% 0%;}
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive; /* Solo el título con Pacifico */
+      font-size: 4.2em;
+      text-shadow: 4px 4px 10px #000;
+      margin-bottom: 50px;
+      letter-spacing: 3px;
+      color: #fffde7;
+    }
+
+    .boton {
+      background: linear-gradient(145deg, #4caf50, #1b5e20);
+      border: 2px solid #ffee58;
+      color: white;
+      padding: 15px 35px;
+      margin: 12px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      font-family: inherit; /* Hereda la fuente del body (Arial) */
+    }
+
+    .boton:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px #ffee58;
+      background: linear-gradient(145deg, #66bb6a, #2e7d32);
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .boton-final {
+      margin-top: 40px;
+    }
+
+    .result {
+      font-size: 1.8em;
+      margin: 40px 0;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      font-family: inherit; /* Arial */
+    }
+
+    .options button {
+      margin: 10px;
+      font-family: inherit; /* Arial */
+      font-size: 1em;
+      border: none;
+      border-radius: 15px;
+      padding: 12px 25px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .options button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>¿Qué Gabi sos?</h1>
+
+  <div class="question-container" id="quiz"></div>
+
+  <div class="footer-button">
+    <button class="boton" onclick="window.location.href='index.html'">Volver al inicio</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "¿Qué hacés en una fiesta?",
+        options: [
+          { text: "Bailo como loca", type: "fiestera" },
+          { text: "Observo desde un rincón", type: "misteriosa" },
+          { text: "Hablo con todo el mundo", type: "sociable" },
+          { text: "Armo la playlist y manejo el mood", type: "controladora" }
+        ]
+      },
+      {
+        text: "¿Qué tipo de plan preferís?",
+        options: [
+          { text: "Salir sin rumbo y ver qué pasa", type: "sociable" },
+          { text: "Quedarme en casa con una peli", type: "misteriosa" },
+          { text: "Organizar un evento con juegos", type: "controladora" },
+          { text: "Fiesta hasta el amanecer", type: "fiestera" }
+        ]
+      },
+      {
+        text: "Tu frase de cabecera es:",
+        options: [
+          { text: "No sé, pero lo resolvemos", type: "controladora" },
+          { text: "Amo este quilombo", type: "fiestera" },
+          { text: "¿Y este quién es?", type: "misteriosa" },
+          { text: "¡Hola, reina!", type: "sociable" }
+        ]
+      },
+      {
+        text: "Elegí una red social:",
+        options: [
+          { text: "Instagram", type: "sociable" },
+          { text: "Spotify", type: "misteriosa" },
+          { text: "TikTok", type: "fiestera" },
+          { text: "Google Calendar", type: "controladora" }
+        ]
+      },
+      {
+        text: "¿Cuál es tu talento oculto?",
+        options: [
+          { text: "Armar planes perfectos", type: "controladora" },
+          { text: "Recordar chismes", type: "sociable" },
+          { text: "Elegir temazos", type: "fiestera" },
+          { text: "Desaparecer sin avisar", type: "misteriosa" }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    const scores = { fiestera: 0, misteriosa: 0, sociable: 0, controladora: 0 };
+    const container = document.getElementById('quiz');
+
+    function showQuestion(index) {
+      const q = questions[index];
+      container.innerHTML = `
+        <h2>${q.text}</h2>
+        <div class="options">
+          ${q.options.map((opt, i) => `<button onclick="selectOption(${index}, ${i})">${opt.text}</button>`).join('')}
+        </div>`;
+    }
+
+    function selectOption(qIndex, optIndex) {
+      const type = questions[qIndex].options[optIndex].type;
+      scores[type]++;
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion(currentQuestion);
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const result = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+      const resultText = {
+        fiestera: "🎉 ¡Sos una Gabi FIESTERA! Siempre encendiendo la pista, sos la reina de cualquier reunión.",
+        misteriosa: "🌙 ¡Sos una Gabi MISTERIOSA! Nadie sabe muy bien dónde estás, pero todos te quieren igual.",
+        sociable: "💬 ¡Sos una Gabi SOCIABLE! Hablás con todos, conocés a todos, y nadie se te escapa.",
+        controladora: "📋 ¡Sos una Gabi CONTROLADORA! Si no lo organizás vos, no sale. Pero gracias a vos, todo funciona."
+      };
+      container.innerHTML = `
+        <div class="result">${resultText[result]}</div>
+        <button class="boton boton-final" onclick="location.reload()">🔁 Volver a empezar</button>
+      `;
+    }
+
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>

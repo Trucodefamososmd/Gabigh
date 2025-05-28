@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Premios - Gabriela Gianatassio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif; /* Fuente normal para todo el body */
+      background: radial-gradient(circle at top left, #00c853, #ffd600, #1b5e20);
+      background-size: 400% 400%;
+      animation: fondoTropical 18s ease infinite;
+      color: white;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    @keyframes fondoTropical {
+      0% {background-position: 0% 0%;}
+      50% {background-position: 100% 100%;}
+      100% {background-position: 0% 0%;}
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive; /* Solo el título en Pacifico */
+      font-size: 4em;
+      text-shadow: 4px 4px 10px #000;
+      margin-bottom: 20px;
+      letter-spacing: 3px;
+      color: #fffde7;
+    }
+
+    .aclaracion {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      max-width: 600px;
+      color: #fff9c4;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .premio {
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid #ffee58;
+      border-radius: 20px;
+      padding: 15px;
+      width: 200px;
+      min-height: 250px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+    }
+
+    .premio h3 {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      color: #fffde7;
+    }
+
+    .dropzone {
+      width: 100%;
+      height: 200px;
+      border: 2px dashed #ffee58;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+    }
+
+    .dropzone img {
+      width: 100%;
+      height: auto;
+    }
+
+    .jugadores {
+      margin: 30px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .jugadores img {
+      width: 80px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: transform 0.3s, border 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .jugadores img:hover {
+      transform: scale(1.1);
+    }
+
+    .jugadores img.seleccionado {
+      border: 2px solid #ffee58;
+      transform: scale(1.2);
+    }
+
+    button {
+      background: linear-gradient(145deg, #4caf50, #1b5e20);
+      border: 2px solid #ffee58;
+      color: white;
+      padding: 15px 35px;
+      font-size: 1.2em;
+      font-weight: bold;
+      font-family: Arial, Helvetica, sans-serif; /* Botón con fuente normal también */
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+      margin: 25px 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px #ffee58;
+      background: linear-gradient(145deg, #66bb6a, #2e7d32);
+    }
+  </style>
+</head>
+<body>
+  <h1>Premios - Gabriela Gianatassio</h1>
+  <div class="aclaracion">
+    Tocá una imagen y luego el recuadro donde querés ubicarla. No hace falta arrastrar.
+  </div>
+  <div class="jugadores" id="jugadores"></div>
+  <div class="container" id="categorias"></div>
+  <div>
+    <button onclick="window.location.href='index.html'">Volver al inicio</button>
+  </div>
+
+  <script>
+    const jugadores = Array.from({length: 35}, (_, i) => `jugadores/${i+1}.png`);
+    const usados = new Set();
+    const categorias = [
+      "Más víbora", "Más planta", "Más gracioso", "Más competitivo", "Más buena onda", "Más estratega",
+      "Más rencoroso", "Más llorón", "Más líder", "Más pacífico", "Más traidor", "Más amoroso",
+      "Más comilón", "Más dormilón", "Más divertido", "Más insistente", "Más rápido", "Más lento",
+      "Más molesto", "Más chillón", "Más elegante", "Más fachero", "Más influencer", "Más escandaloso",
+      "Más vengativo", "Más intenso", "Más justo", "Más relajado", "Más simpático", "Más misterioso",
+      "Más caótico", "Más romántico", "Más jugador del pueblo", "Más estratega oculto", "Más querido"
+    ];
+
+    let seleccionado = null;
+    const elecciones = {};
+
+    jugadores.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.id = src;
+      img.onclick = () => {
+        if (usados.has(src)) {
+          alert("Ya usaste esta imagen.");
+          return;
+        }
+        document.querySelectorAll('.jugadores img').forEach(i => i.classList.remove('seleccionado'));
+        img.classList.add('seleccionado');
+        seleccionado = src;
+      };
+      document.getElementById('jugadores').appendChild(img);
+    });
+
+    categorias.forEach(nombre => {
+      const div = document.createElement('div');
+      div.className = 'premio';
+      div.innerHTML = `<h3>${nombre}</h3><div class='dropzone'></div>`;
+      const dropzone = div.querySelector('.dropzone');
+      dropzone.onclick = () => {
+        if (!seleccionado) {
+          alert("Primero seleccioná una imagen.");
+          return;
+        }
+        if (usados.has(seleccionado)) {
+          alert("Ya usaste esta imagen.");
+          return;
+        }
+        usados.add(seleccionado);
+        dropzone.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = seleccionado;
+        dropzone.appendChild(img);
+        elecciones[nombre] = seleccionado;
+        document.querySelectorAll('.jugadores img').forEach(i => i.classList.remove('seleccionado'));
+        seleccionado = null;
+      };
+      document.getElementById('categorias').appendChild(div);
+    });
+  </script>
+</body>
+</html>
